@@ -1,0 +1,363 @@
+__author__ = 'Zhaoliang'
+
+
+from ChessPiece import ChessPiece
+import sys
+
+
+class Bing(ChessPiece):
+
+    def get_image_file_name(self):
+        if self.selected:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RPS.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BPS.GIF"
+        else:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RP.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BP.GIF"
+
+    def get_selected_image(self):
+        if self.is_red:
+            return "/home/chy/cchess-zero-master/images/RPS.GIF"
+        else:
+            return "/home/chy/cchess-zero-master/images/BPS.GIF"
+
+    def can_move(self, board, dx, dy):
+        if abs(dx) + abs(dy) != 1:
+            # print('Too far')
+            return False
+        if (self.is_north() and dy == -1) or (self.is_south() and dy==1):
+            # print('cannot go back')
+            return False
+        if dy == 0:
+            if (self.is_north() and self.y <5) or (self.is_south() and self.y >=5):
+                # print('behind river')
+                return False
+        nx, ny = self.x + dx, self.y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                # print('blocked by yourself')
+                return False
+            else:
+                pass
+                #print 'kill a chessman'
+        return True
+
+    def __init__(self, x, y, is_red, direction):
+        ChessPiece.__init__(self, x, y, is_red, direction)
+
+    def display(self):
+        sys.stdout.write('B')
+
+
+
+from ChessPiece import ChessPiece
+
+class Che(ChessPiece):
+
+    def get_image_file_name(self):
+        if self.selected:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RRS.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BRS.GIF"
+        else:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RR.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BR.GIF"
+
+    def get_selected_image(self):
+        if self.is_red:
+            return "/home/chy/cchess-zero-master/images/RRS.GIF"
+        else:
+            return "/home/chy/cchess-zero-master/images/BRS.GIF"
+
+    def can_move(self, board, dx, dy):
+        if dx != 0 and dy != 0:
+            #print 'no diag'
+            return False
+        nx, ny = self.x + dx, self.y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
+        cnt = self.count_pieces(board, self.x, self.y, dx, dy)
+        # print 'Che cnt', cnt
+        if (nx, ny) not in board.pieces:
+            if cnt!= 0:
+                #print 'blocked'
+                return False
+        else:
+            if cnt != 0:
+                #print 'cannot kill'
+                return False
+            print ('kill a chessman')
+        return True
+
+    def __init__(self, x, y, is_red, direction):
+        ChessPiece.__init__(self, x, y, is_red, direction)
+
+
+
+
+from ChessPiece import ChessPiece
+
+
+class Ma(ChessPiece):
+
+    def get_image_file_name(self):
+        if self.selected:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RNS.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BNS.GIF"
+        else:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RN.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BN.GIF"
+
+    def get_selected_image(self):
+        if self.is_red:
+            return "/home/chy/cchess-zero-master/images/RNS.GIF"
+        else:
+            return "/home/chy/cchess-zero-master/images/BNS.GIF"
+
+    def can_move(self, board, dx, dy):
+        x, y = self.x, self.y
+        nx, ny = x+dx, y+dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if dx == 0 or dy == 0:
+            #print 'no straight'
+            return False
+        if abs(dx) + abs(dy) !=3:
+            #print 'not normal'
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
+        if (x if abs(dx) ==1 else x+dx/2, y if abs(dy) ==1 else y+ (dy/2)) in board.pieces:
+            #print 'blocked'
+            return False
+        return True
+
+    def __init__(self, x, y, is_red, direction):
+        ChessPiece.__init__(self, x, y, is_red, direction)
+
+
+
+
+from ChessPiece import ChessPiece
+
+
+class Pao(ChessPiece):
+
+    def get_image_file_name(self):
+        if self.selected:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RCS.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BCS.GIF"
+        else:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RC.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BC.GIF"
+
+    def get_selected_image(self):
+        if self.is_red:
+            return "/home/chy/cchess-zero-master/images/RCS.GIF"
+        else:
+            return "/home/chy/cchess-zero-master/images/BCS.GIF"
+
+    def can_move(self, board, dx, dy):
+        if dx != 0 and dy != 0:
+            #print 'no diag'
+            return False
+        nx, ny = self.x + dx, self.y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
+        cnt = self.count_pieces(board, self.x, self.y, dx, dy)
+        # print 'Pao cnt',cnt
+        if (nx, ny) not in board.pieces:
+            if cnt!= 0:
+                #print 'blocked'
+                return False
+        else:
+            if cnt != 1:
+                #print 'cannot kill'
+                return False
+        return True
+
+    def __init__(self, x, y, is_red, direction):
+        ChessPiece.__init__(self, x, y, is_red, direction)
+
+
+
+__author__ = 'Zhaoliang'
+from ChessPiece import ChessPiece
+
+
+class Shi(ChessPiece):
+
+    def get_image_file_name(self):
+        if self.selected:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RAS.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BAS.GIF"
+        else:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RA.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BA.GIF"
+
+    def get_selected_image(self):
+        if self.is_red:
+            return "/home/chy/cchess-zero-master/images/RAS.GIF"
+        else:
+            return "/home/chy/cchess-zero-master/images/BAS.GIF"
+
+    def can_move(self, board, dx, dy):
+        nx, ny = self.x + dx, self.y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
+        x, y = self.x, self.y
+        if not (self.is_north() and 3 <= nx <=5 and 0<= ny <=2) and\
+                not (self.is_south() and 3 <= nx <= 5 and 7 <= ny <= 9):
+            #print 'out of castle'
+            return False
+        if self.is_north() and (nx, ny) == (4, 1) or (x,y) == (4,1):
+            if abs(dx)>1 or abs(dy)>1:
+                #print 'too far'
+                return False
+        if self.is_south() and (nx, ny) == (4, 8) or (x,y) == (4,8):
+            if abs(dx)>1 or abs(dy)>1:
+                #print 'too far'
+                return False
+        #below modified by Fei Li
+        if abs(dx) != 1 or abs(dy) != 1:
+            #print 'no diag'
+            return False
+        return True
+
+    def __init__(self, x, y, is_red, direction):
+        ChessPiece.__init__(self, x, y, is_red, direction)
+
+
+
+from ChessPiece import ChessPiece
+
+
+class Shuai(ChessPiece):
+
+    is_king = True
+    def get_image_file_name(self):
+        if self.selected:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RKS.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BKS.GIF"
+        else:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RK.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BK.GIF"
+
+    def get_selected_image(self):
+        if self.is_red:
+            return "/home/chy/cchess-zero-master/images/RKS.GIF"
+        else:
+            return "/home/chy/cchess-zero-master/images/BKS.GIF"
+
+    def can_move(self, board, dx, dy):
+        # print 'king'
+        nx, ny = self.x + dx, self.y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
+        if dx == 0 and self.count_pieces(board, self.x, self.y, dx, dy) == 0 and ((nx, ny) in board.pieces) and board.pieces[nx, ny].is_king:
+            return True
+        if not (self.is_north() and 3 <= nx <=5 and 0<= ny <=2) and not (self.is_south() and 3 <= nx <= 5 and 7 <= ny <= 9):
+            # print 'out of castle'
+            return False
+        if abs(dx) + abs(dy) !=1:
+            #print 'too far'
+            return False
+        return True
+
+    def __init__(self, x, y, is_red, direction):
+        ChessPiece.__init__(self, x, y, is_red, direction)
+
+
+
+from ChessPiece import ChessPiece
+
+
+class Xiang(ChessPiece):
+
+    def get_image_file_name(self):
+        if self.selected:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RBS.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BBS.GIF"
+        else:
+            if self.is_red:
+                return "/home/chy/cchess-zero-master/images/RB.GIF"
+            else:
+                return "/home/chy/cchess-zero-master/images/BB.GIF"
+
+    def get_selected_image(self):
+        if self.is_red:
+            return "/home/chy/cchess-zero-master/images/RBS.GIF"
+        else:
+            return "/home/chy/cchess-zero-master/images/BBS.GIF"
+
+    def can_move(self, board, dx, dy):
+        x,y = self.x, self.y
+        nx, ny = x + dx, y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
+        if (self.is_north() and ny > 4) or (self.is_south() and ny <5):
+            #print 'no river cross'
+            return False
+
+        if abs(dx)!=2 or abs(dy)!=2:
+            #print 'not normal'
+            return False
+        sx, sy = dx/abs(dx), dy/abs(dy)
+        if (x+sx, y+sy) in board.pieces:
+            #print 'blocked'
+            return False
+        return True
+
+    def __init__(self, x, y, is_red, direction):
+        ChessPiece.__init__(self, x, y, is_red, direction)
+
+
